@@ -1,5 +1,8 @@
 package com.kongheng.springboot.config;
 
+import static com.kongheng.springboot.constance.ApplicationUserRole.ADMIN;
+import static com.kongheng.springboot.constance.ApplicationUserRole.STUDENT;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,10 +39,16 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     UserDetails kongheng = User.builder()
         .username("kongheng")
         .password(passwordEncoder.encode("password"))
-        .roles("STUDENT")
+        .roles(ADMIN.name())
+        .build();
+    UserDetails linda = User.builder()
+        .username("linda")
+        .password(passwordEncoder.encode("password"))
+        .roles(STUDENT.name())
         .build();
     return new InMemoryUserDetailsManager(
-        kongheng
+        kongheng,
+        linda
     );
   }
 }
