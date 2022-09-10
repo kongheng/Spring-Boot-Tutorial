@@ -1,4 +1,4 @@
-package com.kongheng.springboot.constance;
+package com.kongheng.springboot.constant;
 
 public enum ApplicationUserPermission {
   STUDENT_READ("student:read"),

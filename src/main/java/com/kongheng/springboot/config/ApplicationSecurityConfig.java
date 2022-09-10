@@ -1,7 +1,7 @@
 package com.kongheng.springboot.config;
 
-import static com.kongheng.springboot.constance.ApplicationUserRole.ADMIN;
-import static com.kongheng.springboot.constance.ApplicationUserRole.STUDENT;
+import static com.kongheng.springboot.constant.ApplicationUserRole.ADMIN;
+import static com.kongheng.springboot.constant.ApplicationUserRole.STUDENT;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -27,6 +27,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     http
         .authorizeRequests()
         .antMatchers("/", "index", "/css/*", "/js/*").permitAll()
+        .antMatchers("/api/**").hasRole(STUDENT.name())
         .anyRequest()
         .authenticated()
         .and()
