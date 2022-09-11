@@ -1,8 +1,13 @@
 package com.kongheng.springboot.config;
 
+import static com.kongheng.springboot.constant.ApplicationUserPermission.COURSE_WRITE;
 import static com.kongheng.springboot.constant.ApplicationUserRole.ADMIN;
 import static com.kongheng.springboot.constant.ApplicationUserRole.ADMIN_TRAINEE;
 import static com.kongheng.springboot.constant.ApplicationUserRole.STUDENT;
+import static org.springframework.http.HttpMethod.DELETE;
+import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpMethod.POST;
+import static org.springframework.http.HttpMethod.PUT;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -30,6 +35,10 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
         .authorizeRequests()
         .antMatchers("/", "index", "/css/*", "/js/*").permitAll()
         .antMatchers("/api/**").hasRole(STUDENT.name())
+        .antMatchers(DELETE, "/management/api/**").hasAnyAuthority(COURSE_WRITE.getPermission())
+        .antMatchers(POST, "/management/api/**").hasAnyAuthority(COURSE_WRITE.getPermission())
+        .antMatchers(PUT, "/management/api/**").hasAnyAuthority(COURSE_WRITE.getPermission())
+        .antMatchers(GET, "/management/api/**").hasAnyRole(ADMIN.name(), ADMIN_TRAINEE.name())
         .anyRequest()
         .authenticated()
         .and()
@@ -42,17 +51,20 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     UserDetails kongheng = User.builder()
         .username("kongheng")
         .password(passwordEncoder.encode("password"))
-        .roles(ADMIN.name())
+//        .roles(ADMIN.name())
+        .authorities(ADMIN.getGrantedAuthorities())
         .build();
     UserDetails linda = User.builder()
         .username("linda")
         .password(passwordEncoder.encode("password"))
-        .roles(STUDENT.name())
+//        .roles(STUDENT.name())
+        .authorities(STUDENT.getGrantedAuthorities())
         .build();
     UserDetails tom = User.builder()
         .username("tom")
         .password(passwordEncoder.encode("password"))
-        .roles(ADMIN_TRAINEE.name())
+//        .roles(ADMIN_TRAINEE.name())
+        .authorities(ADMIN_TRAINEE.getGrantedAuthorities())
         .build();
     return new InMemoryUserDetailsManager(
         kongheng,
