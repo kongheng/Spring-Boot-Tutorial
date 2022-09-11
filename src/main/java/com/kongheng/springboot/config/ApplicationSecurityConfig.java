@@ -4,6 +4,7 @@ import static com.kongheng.springboot.constant.ApplicationUserRole.ADMIN;
 import static com.kongheng.springboot.constant.ApplicationUserRole.ADMIN_TRAINEE;
 import static com.kongheng.springboot.constant.ApplicationUserRole.STUDENT;
 
+import java.util.concurrent.TimeUnit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -43,7 +44,18 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
         .and()
         .formLogin()
         .loginPage("/login").permitAll()
-        .defaultSuccessUrl("/courses", true);
+        .defaultSuccessUrl("/courses", true)
+        .and()
+        .rememberMe()
+          .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(21))
+          .key("somethingverysecured")
+        .and()
+        .logout()
+          .logoutUrl("/logout")
+          .clearAuthentication(true)
+          .invalidateHttpSession(true)
+          .deleteCookies("JSESSIONID", "remember-me")
+          .logoutSuccessUrl("/login");
   }
 
   @Override
