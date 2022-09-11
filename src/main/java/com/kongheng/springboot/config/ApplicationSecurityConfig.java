@@ -1,6 +1,7 @@
 package com.kongheng.springboot.config;
 
 import static com.kongheng.springboot.constant.ApplicationUserRole.ADMIN;
+import static com.kongheng.springboot.constant.ApplicationUserRole.ADMIN_TRAINEE;
 import static com.kongheng.springboot.constant.ApplicationUserRole.STUDENT;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http
+        .csrf().disable()
         .authorizeRequests()
         .antMatchers("/", "index", "/css/*", "/js/*").permitAll()
         .antMatchers("/api/**").hasRole(STUDENT.name())
@@ -47,9 +49,15 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
         .password(passwordEncoder.encode("password"))
         .roles(STUDENT.name())
         .build();
+    UserDetails tom = User.builder()
+        .username("tom")
+        .password(passwordEncoder.encode("password"))
+        .roles(ADMIN_TRAINEE.name())
+        .build();
     return new InMemoryUserDetailsManager(
         kongheng,
-        linda
+        linda,
+        tom
     );
   }
 }
