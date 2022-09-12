@@ -1,2 +1,8 @@
 server:
   port: 8080
+
+application:
+  jwt:
+    secretKey: somethingverysecuresomethingverysecuresomethingverysecuresomethingverysecure
+    tokenPrefix: Bearer_
+    tokenExpirationAfterDay: 14
